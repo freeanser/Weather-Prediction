@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Prediction</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #prediction {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Weather Prediction</h2>
+    <label for="Dew_Point_Temp_C">Dew Point Temperature (°C):</label>
+    <input type="number" id="Dew_Point_Temp_C" name="Dew_Point_Temp_C" placeholder="Enter dew point temperature...">
+    <label for="Press_kPa">Pressure (kPa):</label>
+    <input type="number" id="Press_kPa" name="Press_kPa" placeholder="Enter pressure...">
+    <label for="Rel_Hum_%">Relative Humidity (%):</label>
+    <input type="number" id="Rel_Hum_%" name="Rel_Hum_%" placeholder="Enter relative humidity...">
+    <label for="Wind_Speed_km/h">Wind Speed (km/h):</label>
+    <input type="number" id="Wind_Speed_km/h" name="Wind_Speed_km/h" placeholder="Enter wind speed...">
+    <button onclick="predict()">Predict</button>
+    <div id="prediction"></div>
+  </div>
+
+  <script>
+    function predict() {
+      // 提取输入框中的值
+      var Dew_Point_Temp_C = document.getElementById('Dew_Point_Temp_C').value;
+      var Press_kPa = document.getElementById('Press_kPa').value;
+      var Rel_Hum_ = document.getElementById('Rel_Hum_%').value;
+      var Wind_Speed_km_h = document.getElementById('Wind_Speed_km/h').value;
+
+      // 将特征作为JSON格式的数据传递给API
+      var data = {
+        "Dew_Point_Temp_C": parseFloat(Dew_Point_Temp_C),
+        "Press_kPa": parseFloat(Press_kPa),
+        "Rel_Hum_%": parseFloat(Rel_Hum_),
+        "Wind_Speed_km/h": parseFloat(Wind_Speed_km_h)
+      };
+
+      // 调用API进行预测
+      fetch('/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          // 在前端页面上显示预测结果
+          document.getElementById('prediction').innerHTML = 'Predicted Temperature: ' + data.prediction[0] + ' °C';
+        })
+        .catch(error => console.error('Error:', error));
+    }
+  </script>
+</body>
+
+</html>
