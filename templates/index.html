@@ -55,35 +55,41 @@
 <body>
   <div class="container">
     <h2>Weather Prediction</h2>
+    <!-- Dew Point Temperature input -->
     <label for="Dew_Point_Temp_C">Dew Point Temperature (°C):</label>
     <input type="number" id="Dew_Point_Temp_C" name="Dew_Point_Temp_C" placeholder="Enter dew point temperature...">
+    <!-- Pressure input -->
     <label for="Press_kPa">Pressure (kPa):</label>
     <input type="number" id="Press_kPa" name="Press_kPa" placeholder="Enter pressure...">
+    <!-- Relative Humidity input -->
     <label for="Rel_Hum_%">Relative Humidity (%):</label>
     <input type="number" id="Rel_Hum_%" name="Rel_Hum_%" placeholder="Enter relative humidity...">
+    <!-- Wind Speed input -->
     <label for="Wind_Speed_km/h">Wind Speed (km/h):</label>
     <input type="number" id="Wind_Speed_km/h" name="Wind_Speed_km/h" placeholder="Enter wind speed...">
+    <!-- Predict button -->
     <button onclick="predict()">Predict</button>
+    <!-- Display prediction -->
     <div id="prediction"></div>
   </div>
 
   <script>
     function predict() {
-      // 提取输入框中的值
-      var Dew_Point_Temp_C = document.getElementById('Dew_Point_Temp_C').value;
-      var Press_kPa = document.getElementById('Press_kPa').value;
-      var Rel_Hum_ = document.getElementById('Rel_Hum_%').value;
-      var Wind_Speed_km_h = document.getElementById('Wind_Speed_km/h').value;
+      // Extract values from input fields
+      const Dew_Point_Temp_C = document.getElementById('Dew_Point_Temp_C').value;
+      const Press_kPa = document.getElementById('Press_kPa').value;
+      const Rel_Hum_ = document.getElementById('Rel_Hum_%').value;
+      const Wind_Speed_km_h = document.getElementById('Wind_Speed_km/h').value;
 
-      // 将特征作为JSON格式的数据传递给API
-      var data = {
+      // Pass features as JSON-formatted data to the API
+      const data = {
         "Dew_Point_Temp_C": parseFloat(Dew_Point_Temp_C),
         "Press_kPa": parseFloat(Press_kPa),
         "Rel_Hum_%": parseFloat(Rel_Hum_),
         "Wind_Speed_km/h": parseFloat(Wind_Speed_km_h)
       };
 
-      // 调用API进行预测
+      // Call the API for prediction
       fetch('/predict', {
         method: 'POST',
         headers: {
@@ -93,7 +99,7 @@
       })
         .then(response => response.json())
         .then(data => {
-          // 在前端页面上显示预测结果
+          // Display prediction result on the frontend page
           document.getElementById('prediction').innerHTML = 'Predicted Temperature: ' + data.prediction[0] + ' °C';
         })
         .catch(error => console.error('Error:', error));
